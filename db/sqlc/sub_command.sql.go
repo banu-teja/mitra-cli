@@ -7,7 +7,7 @@ package db
 
 import (
 	"context"
-	"database/sql"
+	"time"
 )
 
 const createSubCommand = `-- name: CreateSubCommand :one
@@ -134,15 +134,15 @@ ORDER BY sc.execution_order ASC
 `
 
 type GetSubCommandsWithRequestRow struct {
-	ID             int64        `json:"id"`
-	RequestID      int64        `json:"request_id"`
-	Command        string       `json:"command"`
-	CommandOutput  string       `json:"command_output"`
-	CommandStatus  string       `json:"command_status"`
-	ExecutionOrder int64        `json:"execution_order"`
-	CreatedAt      sql.NullTime `json:"created_at"`
-	InputContent   string       `json:"input_content"`
-	CommandType    string       `json:"command_type"`
+	ID             int64     `json:"id"`
+	RequestID      int64     `json:"request_id"`
+	Command        string    `json:"command"`
+	CommandOutput  string    `json:"command_output"`
+	CommandStatus  string    `json:"command_status"`
+	ExecutionOrder int64     `json:"execution_order"`
+	CreatedAt      time.Time `json:"created_at"`
+	InputContent   string    `json:"input_content"`
+	CommandType    string    `json:"command_type"`
 }
 
 func (q *Queries) GetSubCommandsWithRequest(ctx context.Context, requestID int64) ([]GetSubCommandsWithRequestRow, error) {

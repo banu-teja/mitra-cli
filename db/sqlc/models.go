@@ -5,22 +5,22 @@
 package db
 
 import (
-	"database/sql"
+	"time"
 )
 
 type CommandRequest struct {
-	ID           int64        `json:"id"`
-	InputContent string       `json:"input_content"`
-	CommandType  string       `json:"command_type"`
-	CreatedAt    sql.NullTime `json:"created_at"`
+	ID           int64     `json:"id"`
+	InputContent string    `json:"input_content"`
+	CommandType  string    `json:"command_type"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type SubCommand struct {
-	ID             int64        `json:"id"`
-	RequestID      int64        `json:"request_id"`
-	Command        string       `json:"command"`
-	CommandOutput  string       `json:"command_output"`
-	CommandStatus  string       `json:"command_status"`
-	ExecutionOrder int64        `json:"execution_order"`
-	CreatedAt      sql.NullTime `json:"created_at"`
+	ID             int64     `json:"id"`
+	RequestID      int64     `json:"request_id"`
+	Command        string    `json:"command"`
+	CommandOutput  string    `json:"command_output"`
+	CommandStatus  string    `json:"command_status"`
+	ExecutionOrder int64     `json:"execution_order"`
+	CreatedAt      time.Time `json:"created_at"`
 }

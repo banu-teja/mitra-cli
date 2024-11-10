@@ -67,10 +67,15 @@ func executeCommand(command string) (string, string) {
 	cmd := exec.Command("sh", "-c", command)
 	output, err := cmd.CombinedOutput()
 
-	if err != nil {
-		log.Printf("Command execution failed: %v", err)
-		return string(output), "error"
+	outputStr := string(output)
+	if len(outputStr) > 500 { // Adjust this number as needed
+		outputStr = outputStr[:250] + "\n...\n" + outputStr[len(outputStr)-250:]
 	}
 
-	return string(output), "success"
+	if err != nil {
+		log.Printf("Command execution failed: %v", err)
+		return outputStr, "error"
+	}
+
+	return outputStr, "success"
 }

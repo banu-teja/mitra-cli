@@ -15,6 +15,7 @@ type Querier interface {
 	DeleteSubCommand(ctx context.Context, id int64) error
 	GetCommandRequest(ctx context.Context, id int64) (CommandRequest, error)
 	GetCommandRequestsByType(ctx context.Context, arg GetCommandRequestsByTypeParams) ([]CommandRequest, error)
+	GetLastNEntries(ctx context.Context, limit int64) ([]GetLastNEntriesRow, error)
 	GetSubCommand(ctx context.Context, id int64) (SubCommand, error)
 	GetSubCommandsByStatus(ctx context.Context, arg GetSubCommandsByStatusParams) ([]SubCommand, error)
 	GetSubCommandsWithRequest(ctx context.Context, requestID int64) ([]GetSubCommandsWithRequestRow, error)
