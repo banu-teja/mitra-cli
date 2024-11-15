@@ -26,6 +26,8 @@ func Execute(config utils.Config, store db.Store) {
 		},
 	}
 
+	rootCmd.AddCommand(revertCmd)
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
