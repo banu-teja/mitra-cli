@@ -39,7 +39,7 @@ func formatHistory(history []db.GetLastNEntriesRow) string {
 }
 
 func Handle(question string, config utils.Config, store db.Store) error {
-	client := NewClient(config)
+	client := NewGoogleAIClient(config)
 
 	sysInfo := GetSystemInfo()
 	systemInfo := FormatSystemInfo(sysInfo)
