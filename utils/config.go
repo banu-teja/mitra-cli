@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"embed"
+	"fmt"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -22,20 +24,38 @@ type Config struct {
 	Models map[string]ModelConfig `mapstructure:"AI_MODELS"`
 }
 
+//go:embed app.env
+var embeddedConfig embed.FS
+
 // LoadConfig reads configuration from file or environment variables.
 func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(path)
+	// Important:  We *don't* need AddConfigPath when using embedded files.
+	// viper.AddConfigPath(path)  // Remove this line
+
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
 
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
-	err = viper.ReadInConfig()
+	// Read the embedded config file
+	content, err := embeddedConfig.ReadFile("app.env")
 	if err != nil {
-		return
+		return config, fmt.Errorf("failed to read embedded config: %w", err)
 	}
 
+	// Use ReadConfig with a strings.Reader
+	reader := strings.NewReader(string(content))
+	err = viper.ReadConfig(reader)
+	if err != nil {
+		return config, fmt.Errorf("failed to parse embedded config: %w", err)
+	}
+
+	// Unmarshal the configuration
 	err = viper.Unmarshal(&config)
-	return
+	if err != nil {
+		return config, fmt.Errorf("failed to unmarshal config: %w", err)
+	}
+
+	return config, nil
 }

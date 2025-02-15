@@ -1,7 +1,7 @@
 package main
 
 import (
-	"database/sql"
+	"embed"
 
 	"github.com/rs/zerolog/log"
 
@@ -12,18 +12,29 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+//go:embed db/migration/*
+var migrationFiles embed.FS
+
 func main() {
 	config, err := utils.LoadConfig(".")
+
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot load config")
 	}
+	utils.MigrationFiles = migrationFiles
 
-	connPool, err := sql.Open("sqlite3", "./history.db")
+	sqlDB, err := utils.InitializeDB()
 	if err != nil {
-		log.Fatal().Err(err).Msg("cannot connect to db:")
+		log.Fatal().Err(err).Msg("Failed to initialize database:")
 	}
+	defer sqlDB.Close() // Ensure the database is closed when main exits
 
-	store := db.NewStore(connPool)
+	// connPool, err := sql.Open("sqlite3", "~/.ai/history.db")
+	// if err != nil {
+	// 	log.Fatal().Err(err).Msg("cannot connect to db:")
+	// }
+
+	store := db.NewStore(sqlDB)
 
 	cmd.Execute(config, store)
 }
